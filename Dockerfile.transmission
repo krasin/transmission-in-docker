@@ -1,5 +1,10 @@
 FROM ubuntu
 RUN apt-get install -y transmission-daemon
+RUN apt-get install -y openssh-server
+RUN dpkg-divert --local --rename --add /sbin/initctl
+RUN ln -s /bin/true /sbin/initctl
+RUN mkdir /var/run/sshd
+
 RUN sed -i 's/9091/@PORT@/' /var/lib/transmission-daemon/info/settings.json
 RUN sed -i 's/51413/@PEER_PORT@/' /var/lib/transmission-daemon/info/settings.json
 RUN sed -i 's/"rpc-whitelist": "127.0.0.1", /"rpc-whitelist-enabled": false,/' /var/lib/transmission-daemon/info/settings.json
@@ -9,5 +14,6 @@ RUN sed -i 's/"rpc-password": "transmission",/"rpc-password": "@PASSWORD@",/' /v
 
 EXPOSE :@PORT@
 EXPOSE :@PEER_PORT@
+EXPOSE @SSH_PORT@:22
 
-CMD /bin/bash -c "service transmission-daemon start && while true; do echo hello world; sleep 1; done"
+CMD /bin/bash -c "service transmission-daemon start && /usr/sbin/sshd -D"
