@@ -5,14 +5,13 @@ RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -s /bin/true /sbin/initctl
 RUN mkdir /var/run/sshd
 
-RUN sed -i 's/9091/@PORT@/' /var/lib/transmission-daemon/info/settings.json
 RUN sed -i 's/51413/@PEER_PORT@/' /var/lib/transmission-daemon/info/settings.json
 RUN sed -i 's/"rpc-whitelist": "127.0.0.1", /"rpc-whitelist-enabled": false,/' /var/lib/transmission-daemon/info/settings.json
 RUN sed -i 's/"rpc-username": "transmission",/"rpc-username": "@USERNAME@",/' /var/lib/transmission-daemon/info/settings.json
 RUN sed -i 's/"rpc-password": "transmission",/"rpc-password": "@PASSWORD@",/' /var/lib/transmission-daemon/info/settings.json
 
 
-EXPOSE :@PORT@
+EXPOSE @PORT@:9091
 EXPOSE :@PEER_PORT@
 EXPOSE @SSH_PORT@:22
 
