@@ -2,17 +2,16 @@
 
 set -ue
 
-if [ $# -ne 5 ]
+if [ $# -ne 4 ]
 then
-    echo "Usage: ./mkimage-transmission.sh <username> <password> <port> <peer_port> <ssh_port>"
+    echo "Usage: ./mkimage-transmission.sh <password> <port> <peer_port> <ssh_port>"
     exit 1
 fi
 
-export USERNAME=$1
-export PASSWORD=$2
-export WEB_PORT=$3
-export PEER_PORT=$4
-export SSH_PORT=$5
+export PASSWORD=$1
+export WEB_PORT=$2
+export PEER_PORT=$3
+export SSH_PORT=$4
 
 docker rmi transmission || echo "Old transmission image not found, so nothing to delete"
 

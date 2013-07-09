@@ -4,12 +4,12 @@ RUN apt-get install -y openssh-server
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -s /bin/true /sbin/initctl
 RUN mkdir /var/run/sshd
-RUN adduser --gecos "" --disabled-password $USERNAME
-RUN sh -c "echo \"$PASSWORD\n$PASSWORD\n\" | passwd $USERNAME"
+RUN adduser --gecos "" --disabled-password user
+RUN sh -c "echo \"$PASSWORD\n$PASSWORD\n\" | passwd user"
 
 RUN sed -i 's/51413/$PEER_PORT/' /var/lib/transmission-daemon/info/settings.json
 RUN sed -i 's/"rpc-whitelist": "127.0.0.1", /"rpc-whitelist-enabled": false,/' /var/lib/transmission-daemon/info/settings.json
-RUN sed -i 's/"rpc-username": "transmission",/"rpc-username": "$USERNAME",/' /var/lib/transmission-daemon/info/settings.json
+RUN sed -i 's/"rpc-username": "transmission",/"rpc-username": "user",/' /var/lib/transmission-daemon/info/settings.json
 RUN sed -i 's/"rpc-password": "transmission",/"rpc-password": "$PASSWORD",/' /var/lib/transmission-daemon/info/settings.json
 
 
