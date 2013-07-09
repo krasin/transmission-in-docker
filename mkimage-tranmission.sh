@@ -21,9 +21,15 @@ echo External IP address is determined as $IP_ADDRESS
 
 docker rmi transmission || echo "Old transmission image not found, so nothing to delete"
 
-readonly DOCKERFILE_TMP=`mktemp`
+readonly TMP_DIR=`mktemp -d`
+readonly SETTINGS_JSON="$TMP_DIR/settings.json"
+readonly DOCKERFILE="$TMP_DIR/Dockerfile"
 
-envsubst < Dockerfile.transmission > $DOCKERFILE_TMP
+envsubst < settings.json > $SETTINGS_JSON
+echo settings.json: $SETTINGS_JSON
 
-docker build -t transmission - < $DOCKERFILE_TMP
-echo $DOCKERFILE_TMP
+envsubst < Dockerfile.transmission > $DOCKERFILE
+
+cd $TMP_DIR
+docker build -t transmission .
+echo Dockefile: $DOCKERFILE
