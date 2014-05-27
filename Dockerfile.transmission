@@ -1,6 +1,7 @@
-FROM base:latest
+FROM ubuntu:14.04
 
 RUN dpkg-divert --local --rename --add /sbin/initctl
+RUN rm -f /sbin/initctl
 RUN ln -s /bin/true /sbin/initctl
 
 RUN apt-get install -y transmission-daemon
@@ -19,10 +20,10 @@ RUN sh -c "echo pasv_address=$IP_ADDRESS >> /etc/vsftpd.conf"
 RUN sh -c "echo pasv_min_port=$FTP_PASV_PORT >> /etc/vsftpd.conf"
 RUN sh -c "echo pasv_max_port=$FTP_PASV_PORT >> /etc/vsftpd.conf"
 
-EXPOSE $WEB_PORT:9091
-EXPOSE :$PEER_PORT
-EXPOSE $FTP_PORT:21
-EXPOSE :$FTP_PASV_PORT
-EXPOSE $SSH_PORT:22
+EXPOSE 9091
+EXPOSE $PEER_PORT
+EXPOSE 21
+EXPOSE $FTP_PASV_PORT
+EXPOSE 22
 
 CMD /bin/bash -c "transmission-daemon -g /var/lib/transmission-daemon/info && ( vsftpd & ) && /usr/sbin/sshd -D"
