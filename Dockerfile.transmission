@@ -12,10 +12,11 @@ RUN mkdir -p /var/run/vsftpd/empty
 RUN adduser --gecos "" --disabled-password user
 RUN adduser user sudo
 RUN sh -c "echo \"$PASSWORD\n$PASSWORD\n\" | passwd user"
+RUN chmod 777 /home/user
 
 ADD ./settings.json /var/lib/transmission-daemon/info/settings.json
 
-#RUN sh -c "echo seccomp_sandbox=NO >> /etc/vsftpd.conf"
+RUN sh -c "echo seccomp_sandbox=NO >> /etc/vsftpd.conf"
 RUN sh -c "echo pasv_address=$IP_ADDRESS >> /etc/vsftpd.conf"
 RUN sh -c "echo pasv_min_port=$FTP_PASV_PORT >> /etc/vsftpd.conf"
 RUN sh -c "echo pasv_max_port=$FTP_PASV_PORT >> /etc/vsftpd.conf"
